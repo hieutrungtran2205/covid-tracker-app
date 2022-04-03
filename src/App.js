@@ -1,15 +1,19 @@
 import 'antd/dist/antd.css';
-import { useEffect, useState } from 'react';
-import { fetchData } from './api';
+import { sortBy } from 'lodash';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { fetchData, getAllData, getCountries, getReportByCountry } from './api';
 import './App.css';
-import CardList from './components/Card/CardList';
+import CountrySelector from './components/CountrySelector/CountrySelector';
+import HighLight from './components/HighLight';
+import Summary from './components/Summary';
 import RankCase from './components/Table/RankCase';
-import Table1 from './components/Table/Table1';
 import covidImage from './images/covid19.png';
 
 function App() {
   const [data, setData] = useState({})
   const [tableData, setTableData] = useState([]);
+
+
 
   const sortData = (data) => {
     let sortedData = [...data];
@@ -23,11 +27,9 @@ function App() {
     return sortedData;
   };
   useEffect(() => {
-    const getData = async () => {
-      const data = await fetchData()
-      setData(data)
-    }
-    getData()
+    getAllData.then(res => {
+      setData(res.data)
+    })
   }, []);
   console.log(data);
   useEffect(() => {
@@ -42,15 +44,99 @@ function App() {
 
     getCountriesData();
   }, []);
-  console.log(tableData);
+  // console.log(tableData);
+
+
+
+  const [countries, setCountries] = useState([]);
+  const [selectedCountryId, setSelectedCountryId] = useState('');
+  const [report, setReport] = useState([]);
+
+  useEffect(() => {
+    getCountries().then((res) => {
+      const { data } = res;
+      const countries = sortBy(data, 'Country');
+      setCountries(countries);
+      setSelectedCountryId('vn');
+    });
+  }, []);
+  const handleOnChange = useCallback((e) => {
+    setSelectedCountryId(e);
+  }, []);
+
+  useEffect(() => {
+    if (selectedCountryId) {
+      const selectedCountry = countries.find(
+        (country) => country.ISO2 === selectedCountryId.toUpperCase()
+      );
+      getReportByCountry(selectedCountry.Slug).then((res) => {
+        // console.log('getReportByCountry', { res });
+        // remove last item = current date
+        res.data.pop();
+        setReport(res.data);
+      });
+    }
+  }, [selectedCountryId, countries]);
+
+  const summary = useMemo(() => {
+    if (report && report.length) {
+      const latestData = report[report.length - 1];
+      const latestSecondData = report[report.length - 2];
+      return [
+        {
+          title: 'Confirmed',
+          count: latestData.Confirmed,
+          type: 'confirmed',
+          color: 'red',
+          raise: latestData.Confirmed - latestSecondData.Confirmed,
+        },
+        {
+          title: 'Recovered',
+          count: latestData.Recovered,
+          type: 'recovered',
+          color: 'green',
+          raise: latestData.Recovered - latestSecondData.Recovered,
+        },
+        {
+          title: 'Deaths',
+          count: latestData.Deaths,
+          type: 'death',
+          color: 'black',
+          raise: latestData.Deaths - latestSecondData.Deaths,
+        },
+      ];
+    }
+    return [];
+  }, [report]);
+
+
+  // console.log('r', report);
+
+
+
+
+
+
+
+
+
   return (
 
     <div className="App">
       <img src={covidImage} alt='Covid19' style={{ padding: '8px 32px' }} />
+      <CountrySelector
+        handleOnChange={handleOnChange}
+        countries={countries}
+        value={selectedCountryId}
+      />
       <div className='wrapper'>
-        {/* <CardList data={data} /> */}
-        {/* <Table1 countries={tableData} /> */}
-        <RankCase tableData={tableData} />
+        <div className='left'>
+          <HighLight summary={summary} />
+          <Summary countryId={selectedCountryId} report={report} />
+        </div>
+        <div className='right'>
+          <RankCase tableData={tableData} />
+        </div>
       </div>
     </div>
   );

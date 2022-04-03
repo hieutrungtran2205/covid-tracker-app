@@ -14,7 +14,7 @@ function CardList({ data: { confirmed, recovered, deaths, lastUpdate } }) {
                         value={confirmed.value}
                         lastUpdate={lastUpdate}
                         cardSubtitle="Number of active cases from COVID-19."
-                        headStyle={{ backgroundColor: 'orange', color: '#fff' }}
+                        headStyle={{ backgroundColor: 'red', color: '#fff' }}
                     />
                 </Col>
                 <Col span={8}>
@@ -32,7 +32,7 @@ function CardList({ data: { confirmed, recovered, deaths, lastUpdate } }) {
                         value={deaths.value}
                         lastUpdate={lastUpdate}
                         cardSubtitle="Number of deaths caused by COVID-19."
-                        headStyle={{ backgroundColor: 'red', color: '#fff' }}
+                        headStyle={{ backgroundColor: 'black', color: '#fff' }}
                     />
                 </Col>
 

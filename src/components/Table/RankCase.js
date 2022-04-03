@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table } from 'antd';
+import './RankCase.css'
 
 function RankCase({ tableData }) {
     const columns = [
@@ -10,11 +11,12 @@ function RankCase({ tableData }) {
         {
             title: 'Cases',
             dataIndex: 'cases',
+            sorter: (a, b) => a.cases - b.cases,
         },
     ];
     return (
-        <div>
-            <Table dataSource={tableData} columns={columns} scroll={{ x: -100, y: 300 }} pagination={false} />
+        <div className='rank'>
+            <Table dataSource={tableData} columns={columns} scroll={{ y: 500 }} pagination={false} />
         </div>
     );
 }
