@@ -1,6 +1,5 @@
 .App {
   min-height: 100vh;
-  background-color: aliceblue;
 }
 
 .wrapper {
@@ -8,7 +7,7 @@
 }
 
 .left {
-  margin: 16px 8px 16px 32px;
+  margin: 16px 8px 0px 32px;
   width: 70%;
 }
 

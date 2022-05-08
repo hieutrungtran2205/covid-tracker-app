@@ -1,143 +1,134 @@
-import 'antd/dist/antd.css';
-import { sortBy } from 'lodash';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { fetchData, getAllData, getCountries, getReportByCountry } from './api';
+import { PhoneOutlined } from '@ant-design/icons';
+import { Image, Layout, Menu, Popover } from 'antd';
+import 'antd/dist/antd.min.css';
+import GoogleMapReact from 'google-map-react';
+import { useCallback, useEffect, useState } from 'react';
+import { Route, Routes } from 'react-router';
+import { Link } from 'react-router-dom';
+import { getAllDataCountries, getDataByCountry, getGlobalData, getHistorical } from './api';
 import './App.css';
-import CountrySelector from './components/CountrySelector/CountrySelector';
-import HighLight from './components/HighLight';
-import Summary from './components/Summary';
-import RankCase from './components/Table/RankCase';
-import covidImage from './images/covid19.png';
+import CountrySelector from './components/CountrySelector';
+import HighLightCard from './components/HighLightCard';
+import LineChart from './components/LineChart';
+import News from './components/News';
+import RankCase from './components/RankCase';
+import covid4 from "./images/covid4.jpg";
 
 function App() {
-  const [data, setData] = useState({})
-  const [tableData, setTableData] = useState([]);
+  const [data, setData] = useState([]);
+  const [countryIso, setCountryIso] = useState('GLOBAL');
+  const [dataByCountry, setDataByCountry] = useState([]);
+  const [historical, setHistorical] = useState([]);
+  const [typeCard, setTypeCard] = useState('cases')
+  const { Header } = Layout;
 
-
-
-  const sortData = (data) => {
-    let sortedData = [...data];
-    sortedData.sort((a, b) => {
-      if (a.cases > b.cases) {
-        return -1;
-      } else {
-        return 1;
-      }
-    });
-    return sortedData;
-  };
   useEffect(() => {
-    getAllData.then(res => {
-      setData(res.data)
+    getAllDataCountries().then(({ data }) => {
+      setData(data)
     })
   }, []);
-  console.log(data);
-  useEffect(() => {
-    const getCountriesData = async () => {
-      fetch("https://disease.sh/v3/covid-19/countries")
-        .then((response) => response.json())
-        .then((data) => {
-          let sortedData = sortData(data);
-          setTableData(sortedData);
-        });
-    };
 
-    getCountriesData();
-  }, []);
-  // console.log(tableData);
-
-
-
-  const [countries, setCountries] = useState([]);
-  const [selectedCountryId, setSelectedCountryId] = useState('');
-  const [report, setReport] = useState([]);
-
-  useEffect(() => {
-    getCountries().then((res) => {
-      const { data } = res;
-      const countries = sortBy(data, 'Country');
-      setCountries(countries);
-      setSelectedCountryId('vn');
-    });
-  }, []);
   const handleOnChange = useCallback((e) => {
-    setSelectedCountryId(e);
+    setCountryIso(e);
   }, []);
 
   useEffect(() => {
-    if (selectedCountryId) {
-      const selectedCountry = countries.find(
-        (country) => country.ISO2 === selectedCountryId.toUpperCase()
-      );
-      getReportByCountry(selectedCountry.Slug).then((res) => {
-        // console.log('getReportByCountry', { res });
-        // remove last item = current date
-        res.data.pop();
-        setReport(res.data);
-      });
+    if (countryIso) {
+      const selectedCountry = data.find(country =>
+        country.countryInfo.iso3 === countryIso
+      )
+      if (countryIso === 'GLOBAL') {
+        getGlobalData().then(({ data }) => setDataByCountry(data))
+        getHistorical('all').then(({ data }) => setHistorical([data]))
+      } else {
+        getDataByCountry(selectedCountry?.countryInfo.iso3).then(({ data }) => setDataByCountry(data))
+        getHistorical(selectedCountry?.countryInfo.iso3).then(({ data }) => setHistorical([data?.timeline]))
+      }
     }
-  }, [selectedCountryId, countries]);
+  }, [data, countryIso]);
+  console.log(typeCard);
 
-  const summary = useMemo(() => {
-    if (report && report.length) {
-      const latestData = report[report.length - 1];
-      const latestSecondData = report[report.length - 2];
-      return [
-        {
-          title: 'Confirmed',
-          count: latestData.Confirmed,
-          type: 'confirmed',
-          color: 'red',
-          raise: latestData.Confirmed - latestSecondData.Confirmed,
-        },
-        {
-          title: 'Recovered',
-          count: latestData.Recovered,
-          type: 'recovered',
-          color: 'green',
-          raise: latestData.Recovered - latestSecondData.Recovered,
-        },
-        {
-          title: 'Deaths',
-          count: latestData.Deaths,
-          type: 'death',
-          color: 'black',
-          raise: latestData.Deaths - latestSecondData.Deaths,
-        },
-      ];
-    }
-    return [];
-  }, [report]);
+  const countriesLocation = data.map(item => {
+    const content = (
+      <div>
+        <p style={{ color: 'red' }}>Nhiễm: {item.cases}</p>
+        <p style={{ color: 'green' }}>Khỏi: {item.recovered}</p>
+        <p style={{ color: 'black' }}>Tử vong: {item.deaths}</p>
+      </div>
+    )
 
-
-  // console.log('r', report);
-
-
-
-
-
-
-
-
+    return (
+      <div
+        lat={item.countryInfo.lat}
+        lng={item.countryInfo.long}
+      >
+        <Popover content={content} title={item.country}>
+          <Image src={item.countryInfo.flag} width={25} height={15} preview={false} />
+        </Popover>
+      </div>
+    );
+  });
 
   return (
 
     <div className="App">
-      <img src={covidImage} alt='Covid19' style={{ padding: '8px 32px' }} />
-      <CountrySelector
-        handleOnChange={handleOnChange}
-        countries={countries}
-        value={selectedCountryId}
-      />
-      <div className='wrapper'>
-        <div className='left'>
-          <HighLight summary={summary} />
-          <Summary countryId={selectedCountryId} report={report} />
-        </div>
-        <div className='right'>
-          <RankCase tableData={tableData} />
-        </div>
-      </div>
+      <Header style={{ width: '100%' }} >
+        <Link to='/'>
+          <h1 style={{ color: '#fff', float: 'left' }}>Covid Tracker</h1>
+        </Link>
+        <Menu theme="dark" mode="horizontal" style={{ float: 'right' }} defaultSelectedKeys="1">
+          <Menu.Item key="1">
+            <Link to='/'>
+              Số liệu
+            </Link>
+          </Menu.Item>
+          <Menu.Item key="2">
+            <Link to='map'>
+              Bản đồ
+            </Link>
+          </Menu.Item>
+          <Menu.Item key="3">
+            <Link to='news'>
+              Tin tức
+            </Link>
+          </Menu.Item>
+        </Menu>
+        <h4 style={{ color: '#fff', float: 'right', padding: '0 16px' }}><PhoneOutlined style={{ padding: '0 8px' }} />Đường dây nóng: 19009095</h4>
+      </Header>
+
+      <Routes>
+        <Route path='/' element={
+          <>
+            <CountrySelector
+              handleOnChange={handleOnChange}
+              countries={data}
+              value={countryIso}
+            />
+            <div className='wrapper'>
+              <div className='left'>
+                <HighLightCard summary={dataByCountry} setTypeCard={setTypeCard} />
+                <LineChart data={historical} typeCard={typeCard} />
+              </div>
+              <div className='right'>
+                <RankCase tableData={data} img={covid4} />
+              </div>
+            </div>
+          </>
+        } />
+
+        <Route path='map' element={
+          <>
+            <GoogleMapReact
+              bootstrapURLKeys={{ key: 'AIzaSyBhGFdIRWEQoIOjvVYr99tp8DStInLXEJ4' }}
+              defaultCenter={{ lat: 21, lng: 105.8 }}
+              defaultZoom={1}
+            >
+              {countriesLocation}
+            </GoogleMapReact>
+          </>
+        } />
+        <Route path='news' element={<News />} />
+      </Routes>
     </div>
   );
 }
