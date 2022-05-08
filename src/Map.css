@@ -1,5 +1,37 @@
 .map {
-  width: 100vw;
-  height: 90vh;
-  background-color: aqua;
+  height: calc(100vh - 64px);
+}
+
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+}
+
+.info-flag img {
+  width: 40px;
+  height: 25px;
+}
+
+.info-name {
+  font-size: 20px;
+  font-weight: bold;
+  color: #555;
+  margin-left: 8px;
+}
+
+.info-container {
+  width: 150px;
+}
+
+.info-flag {
+  height: 25px;
+  width: 40px;
+  background-size: cover;
+}
+
+.info-confirmed,
+.info-recovered,
+.info-deaths {
+  font-size: 16px;
+  margin-top: 5px;
 }

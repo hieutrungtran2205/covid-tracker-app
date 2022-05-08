@@ -1,7 +1,7 @@
 import { PhoneOutlined } from '@ant-design/icons';
-import { Image, Layout, Menu, Popover } from 'antd';
+import { Layout, Menu } from 'antd';
 import 'antd/dist/antd.min.css';
-import GoogleMapReact from 'google-map-react';
+import dayjs from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -13,14 +13,15 @@ import LineChart from './components/LineChart';
 import News from './components/News';
 import RankCase from './components/RankCase';
 import covid4 from "./images/covid4.jpg";
+import Map from './components/Map';
 
 function App() {
   const [data, setData] = useState([]);
   const [countryIso, setCountryIso] = useState('GLOBAL');
   const [dataByCountry, setDataByCountry] = useState([]);
   const [historical, setHistorical] = useState([]);
-  const [typeCard, setTypeCard] = useState('cases')
-  const { Header } = Layout;
+  const [typeCard, setTypeCard] = useState('cases');
+  const [timeUpdate, setTimeUpdate] = useState(null);
 
   useEffect(() => {
     getAllDataCountries().then(({ data }) => {
@@ -38,7 +39,10 @@ function App() {
         country.countryInfo.iso3 === countryIso
       )
       if (countryIso === 'GLOBAL') {
-        getGlobalData().then(({ data }) => setDataByCountry(data))
+        getGlobalData().then(({ data }) => {
+          setDataByCountry(data)
+          setTimeUpdate(dayjs(data?.updated).format('hh:mm DD-MM-YY'))
+        })
         getHistorical('all').then(({ data }) => setHistorical([data]))
       } else {
         getDataByCountry(selectedCountry?.countryInfo.iso3).then(({ data }) => setDataByCountry(data))
@@ -46,33 +50,10 @@ function App() {
       }
     }
   }, [data, countryIso]);
-  console.log(typeCard);
-
-  const countriesLocation = data.map(item => {
-    const content = (
-      <div>
-        <p style={{ color: 'red' }}>Nhiễm: {item.cases}</p>
-        <p style={{ color: 'green' }}>Khỏi: {item.recovered}</p>
-        <p style={{ color: 'black' }}>Tử vong: {item.deaths}</p>
-      </div>
-    )
-
-    return (
-      <div
-        lat={item.countryInfo.lat}
-        lng={item.countryInfo.long}
-      >
-        <Popover content={content} title={item.country}>
-          <Image src={item.countryInfo.flag} width={25} height={15} preview={false} />
-        </Popover>
-      </div>
-    );
-  });
 
   return (
-
     <div className="App">
-      <Header style={{ width: '100%' }} >
+      <Layout.Header style={{ width: '100%' }} >
         <Link to='/'>
           <h1 style={{ color: '#fff', float: 'left' }}>Covid Tracker</h1>
         </Link>
@@ -94,7 +75,7 @@ function App() {
           </Menu.Item>
         </Menu>
         <h4 style={{ color: '#fff', float: 'right', padding: '0 16px' }}><PhoneOutlined style={{ padding: '0 8px' }} />Đường dây nóng: 19009095</h4>
-      </Header>
+      </Layout.Header>
 
       <Routes>
         <Route path='/' element={
@@ -103,6 +84,7 @@ function App() {
               handleOnChange={handleOnChange}
               countries={data}
               value={countryIso}
+              timeUpdate={timeUpdate}
             />
             <div className='wrapper'>
               <div className='left'>
@@ -118,13 +100,7 @@ function App() {
 
         <Route path='map' element={
           <>
-            <GoogleMapReact
-              bootstrapURLKeys={{ key: 'AIzaSyBhGFdIRWEQoIOjvVYr99tp8DStInLXEJ4' }}
-              defaultCenter={{ lat: 21, lng: 105.8 }}
-              defaultZoom={1}
-            >
-              {countriesLocation}
-            </GoogleMapReact>
+            <Map countries={data} casesType="cases" />
           </>
         } />
         <Route path='news' element={<News />} />

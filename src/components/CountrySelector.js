@@ -2,8 +2,9 @@ import React from 'react';
 import { Select, Image } from 'antd';
 import dayjs from 'dayjs';
 
-function CountrySelector({ countries, handleOnChange, value }) {
+function CountrySelector({ countries, handleOnChange, value, timeUpdate }) {
     const { Option } = Select;
+    console.log(countries);
     return (
         <div className='countrySelector' style={{ margin: '16px 0 0 32px' }}>
             <Select
@@ -29,7 +30,7 @@ function CountrySelector({ countries, handleOnChange, value }) {
                     </Option>
                 ))}
             </Select>
-            <i style={{ marginLeft: '32px' }}>Cập nhật lần cuối vào lúc {dayjs(countries[1]?.updated).format('hh:mm DD-MM-YY')}</i>
+            <i style={{ marginLeft: '32px' }}>Cập nhật lần cuối vào lúc {timeUpdate}</i>
         </div>
     );
 }

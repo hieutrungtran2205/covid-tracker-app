@@ -1,9 +1,7 @@
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import { useState } from 'react';
 
 export default function LineChart({ data, typeCard }) {
-  const [reportType, setReportType] = useState('all');
   let categories = [];
   let dataSeries = [];
   let categoriesCustom = [];
@@ -83,7 +81,6 @@ export default function LineChart({ data, typeCard }) {
       },
     ],
   };
-  console.log('option', options);
 
   return (
     <div>
