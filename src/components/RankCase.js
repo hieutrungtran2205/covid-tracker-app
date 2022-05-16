@@ -1,6 +1,6 @@
-import { Image, Table } from 'antd';
+import { Table } from 'antd';
 
-function RankCase({ tableData, img }) {
+function RankCase({ tableData }) {
 
     const sortData = (data) => {
         let sortedData = [...data];
@@ -38,8 +38,7 @@ function RankCase({ tableData, img }) {
     ];
     return (
         <div className='rank'>
-            <Table dataSource={dataSorted} columns={columns} scroll={{ y: 340 }} pagination={false} style={{ marginBottom: '16px' }} />
-            <Image src={img} preview={false} />
+            <Table dataSource={dataSorted} columns={columns} scroll={{ y: 500 }} pagination={false} style={{ marginBottom: '16px' }} />
         </div>
     );
 }

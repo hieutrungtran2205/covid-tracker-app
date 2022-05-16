@@ -1,19 +1,17 @@
-import { PhoneOutlined } from '@ant-design/icons';
-import { Layout, Menu } from 'antd';
 import 'antd/dist/antd.min.css';
 import dayjs from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router';
-import { Link } from 'react-router-dom';
 import { getAllDataCountries, getDataByCountry, getGlobalData, getHistorical } from './api';
 import './App.css';
 import CountrySelector from './components/CountrySelector';
+import Footer from './components/Footer';
+import Header from './components/Header';
 import HighLightCard from './components/HighLightCard';
 import LineChart from './components/LineChart';
+import Map from './components/Map';
 import News from './components/News';
 import RankCase from './components/RankCase';
-import covid4 from "./images/covid4.jpg";
-import Map from './components/Map';
 
 function App() {
   const [data, setData] = useState([]);
@@ -53,30 +51,7 @@ function App() {
 
   return (
     <div className="App">
-      <Layout.Header style={{ width: '100%' }} >
-        <Link to='/'>
-          <h1 style={{ color: '#fff', float: 'left' }}>Covid Tracker</h1>
-        </Link>
-        <Menu theme="dark" mode="horizontal" style={{ float: 'right' }} defaultSelectedKeys="1">
-          <Menu.Item key="1">
-            <Link to='/'>
-              Số liệu
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="2">
-            <Link to='map'>
-              Bản đồ
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="3">
-            <Link to='news'>
-              Tin tức
-            </Link>
-          </Menu.Item>
-        </Menu>
-        <h4 style={{ color: '#fff', float: 'right', padding: '0 16px' }}><PhoneOutlined style={{ padding: '0 8px' }} />Đường dây nóng: 19009095</h4>
-      </Layout.Header>
-
+      <Header />
       <Routes>
         <Route path='/' element={
           <>
@@ -92,7 +67,7 @@ function App() {
                 <LineChart data={historical} typeCard={typeCard} />
               </div>
               <div className='right'>
-                <RankCase tableData={data} img={covid4} />
+                <RankCase tableData={data} />
               </div>
             </div>
           </>
@@ -105,6 +80,7 @@ function App() {
         } />
         <Route path='news' element={<News />} />
       </Routes>
+      <Footer />
     </div>
   );
 }

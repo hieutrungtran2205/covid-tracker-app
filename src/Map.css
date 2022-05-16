@@ -7,6 +7,10 @@
   width: 100%;
 }
 
+.wrap-flag-name {
+  display: flex;
+}
+
 .info-flag img {
   width: 40px;
   height: 25px;
