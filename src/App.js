@@ -12,6 +12,9 @@ import LineChart from './components/LineChart';
 import Map from './components/Map';
 import News from './components/News';
 import RankCase from './components/RankCase';
+import Symptom from './components/Symptom';
+import Treatment from './components/Treatment';
+import Vaccine from './components/Vaccine';
 
 function App() {
   const [data, setData] = useState([]);
@@ -78,6 +81,9 @@ function App() {
             <Map countries={data} casesType="cases" />
           </>
         } />
+        <Route path='symptom' element={<Symptom />} />
+        <Route path='treatment' element={<Treatment />} />
+        <Route path='vaccine' element={<Vaccine />} />
         <Route path='news' element={<News />} />
       </Routes>
       <Footer />
