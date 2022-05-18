@@ -29,11 +29,9 @@
 .list-phone {
   display: flex;
   padding: 0 24px 24px 24px;
+  justify-content: space-between;
 }
 
-.col {
-  margin-right: 24px;
-}
 .copyright {
   border-top: 1px solid rgba(255, 255, 255, 0.25);
   text-align: center;

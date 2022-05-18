@@ -5,7 +5,7 @@ import symptomImg from '../images/symptom.jpg'
 function Symptom() {
     return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-            <Image style={{ display: 'block' }} src={symptomImg} preview={false} width={1000} />
+            <Image style={{ display: 'block', width: '80vw' }} src={symptomImg} preview={false} />
         </div>
     );
 }

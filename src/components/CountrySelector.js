@@ -1,33 +1,26 @@
 import React from 'react';
 import { Select, Image } from 'antd';
-import dayjs from 'dayjs';
+import globalIcon from '../images/global.png'
 
 function CountrySelector({ countries, handleOnChange, value, timeUpdate }) {
-    const { Option } = Select;
-    console.log(countries);
     return (
         <div className='countrySelector' style={{ margin: '16px 0 0 32px' }}>
             <Select
                 showSearch
                 style={{ width: 320 }}
                 optionFilterProp="children"
-                // filterOption={(input, option) =>
-                //     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                // }
-                // filterSort={(optionA, optionB) =>
-                //     optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-                // }
                 value={value}
                 onChange={handleOnChange}
             >
-                <Option value="GLOBAL">
-                    Global
-                </Option>
+                <Select.Option value="GLOBAL">
+                    <Image width={18} height={18} src={globalIcon} preview={false} />
+                    <span style={{ marginLeft: '6px' }}>Global</span>
+                </Select.Option>
                 {countries.map((country, index) => (
-                    <Option key={index} value={country.countryInfo.iso3}>
-                        <Image width={25} height={15} src={country.countryInfo.flag} preview={false} />
+                    <Select.Option key={index} value={country.countryInfo.iso3}>
+                        <Image width={25} height={18} src={country.countryInfo.flag} preview={false} />
                         {` ${country.country}`}
-                    </Option>
+                    </Select.Option>
                 ))}
             </Select>
             <i style={{ marginLeft: '32px' }}>Cập nhật lần cuối vào lúc {timeUpdate}</i>

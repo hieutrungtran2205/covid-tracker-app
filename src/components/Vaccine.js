@@ -7,14 +7,14 @@ function Vaccine() {
     return (
         <>
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-                <Image style={{ display: 'block' }} src={vaccineImg1} preview={false} width={1000} />
+                <Image style={{ display: 'block', width: '80vw' }} src={vaccineImg1} preview={false} />
 
             </div>
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-                <Image style={{ display: 'block' }} src={vaccineImg2} preview={false} width={1000} />
+                <Image style={{ display: 'block', width: '80vw' }} src={vaccineImg2} preview={false} />
             </div>
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-                <Image style={{ display: 'block' }} src={vaccineImg3} preview={false} width={1000} />
+                <Image style={{ display: 'block', width: '80vw' }} src={vaccineImg3} preview={false} />
             </div>
         </>
     );
