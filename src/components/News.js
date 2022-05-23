@@ -72,7 +72,7 @@ function News() {
                         }
                     >
                         <List.Item.Meta
-                            title={<a href={item.href}>{item.title}</a>}
+                            title={<a href='#' onClick={() => window.open(item.href)}>{item.title}</a>}
                             description={item.description}
                         />
                     </List.Item>
