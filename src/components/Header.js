@@ -2,15 +2,16 @@ import React from 'react';
 import { Layout, Menu } from 'antd';
 import { Link } from 'react-router-dom';
 import { PhoneOutlined } from '@ant-design/icons';
+import '../App.css';
 
 function Header() {
     return (
         <div>
-            <Layout.Header style={{ width: '100%', justifyContent: 'space-between', display: 'flex' }} >
+            <Layout.Header className='navbar' style={{ width: '100%', justifyContent: 'space-between', display: 'flex' }} >
                 <Link to='/'>
-                    <h1 style={{ color: '#fff', float: 'left', marginRight: '16px' }}>Covid Tracker</h1>
+                    <h1 className='logo' style={{ color: '#fff', float: 'left', marginRight: '16px' }}>Covid Tracker</h1>
                 </Link>
-                <Menu theme="dark" mode="horizontal" defaultSelectedKeys="1" style={{ width: 680 }}>
+                <Menu className='menu' theme="dark" mode="horizontal" defaultSelectedKeys="1" style={{ width: 680 }}>
                     <Menu.Item key="1">
                         <Link to='/'>
                             Số liệu
@@ -42,7 +43,7 @@ function Header() {
                         </Link>
                     </Menu.Item>
                 </Menu>
-                <h4 style={{ color: '#fff', padding: '0 16px' }}><PhoneOutlined style={{ padding: '0 4px' }} />Đường dây nóng: 19009095</h4>
+                <h4 className='hotline' style={{ color: '#fff', padding: '0 16px' }}><PhoneOutlined style={{ padding: '0 4px' }} />Đường dây nóng: 19009095</h4>
             </Layout.Header>
         </div >
     );

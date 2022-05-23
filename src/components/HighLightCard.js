@@ -1,11 +1,12 @@
 import { Card, Col, Row, Typography } from 'antd';
 import CountUp from 'react-countup';
+import '../App.css';
 
 function HighLightCard({ summary, setTypeCard }) {
     return (
         <div className='hightLight' style={{ marginBottom: '16px' }}>
-            <Row gutter={16}>
-                <Col span={8}>
+            <Row gutter={16} className='rowCard'>
+                <Col span={8} className='colCard'>
                     <Card
                         title='Số ca nhiễm'
                         headStyle={{ backgroundColor: 'red', color: '#fff' }}
@@ -19,7 +20,7 @@ function HighLightCard({ summary, setTypeCard }) {
                         +{summary.todayCases} ca trong 24h qua
                     </Card>
                 </Col>
-                <Col span={8}>
+                <Col span={8} className='colCard'>
                     <Card
                         title='Số ca khỏi'
                         headStyle={{ backgroundColor: 'green', color: '#fff' }}
@@ -33,7 +34,7 @@ function HighLightCard({ summary, setTypeCard }) {
                         +{summary.todayRecovered} ca trong 24h qua
                     </Card>
                 </Col>
-                <Col span={8}>
+                <Col span={8} className='colCard'>
                     <Card
                         title='Số ca tử vong'
                         headStyle={{ backgroundColor: 'black', color: '#fff' }}

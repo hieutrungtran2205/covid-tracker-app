@@ -1,6 +1,7 @@
 import React from 'react';
 import { Select, Image } from 'antd';
-import globalIcon from '../images/global.png'
+import globalIcon from '../images/global.png';
+import '../App.css';
 
 function CountrySelector({ countries, handleOnChange, value, timeUpdate }) {
     return (

@@ -1,4 +1,5 @@
 import { List } from 'antd';
+import '../App.css';
 
 function News() {
     const news = [
@@ -46,8 +47,9 @@ function News() {
         }
     ]
     return (
-        <div style={{ margin: '32px', display: 'flex' }}>
+        <div className='news' style={{ margin: '32px', display: 'flex' }}>
             <List
+                className='listNews'
                 itemLayout="vertical"
                 size="large"
                 pagination={{
@@ -76,7 +78,7 @@ function News() {
                     </List.Item>
                 )}
             />
-            <div style={{ width: '40%', marginTop: ' 16px', marginLeft: ' 16px' }}>
+            <div className='video' style={{ width: '40%', marginTop: ' 16px', marginLeft: ' 16px' }}>
                 <iframe style={{ width: '100%' }} height="480" src="https://www.youtube.com/embed/5Ey0Qo69GsE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 <h2>Hướng dẫn F0 điều trị tại nhà</h2>
             </div>

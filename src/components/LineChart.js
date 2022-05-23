@@ -1,5 +1,6 @@
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import '../App.css';
 
 export default function LineChart({ data, typeCard }) {
   let categories = [];
@@ -83,7 +84,7 @@ export default function LineChart({ data, typeCard }) {
   };
 
   return (
-    <div>
+    <div className='lineChart'>
       <HighchartsReact highcharts={Highcharts} options={options} />
     </div>
   );

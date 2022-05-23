@@ -38,3 +38,82 @@
   margin: 0 10%;
   padding: 12px;
 }
+
+@media (max-width: 768px) {
+  .navbar {
+    display: inline-block !important;
+    position: relative;
+  }
+  .menu {
+    width: 60px !important;
+    position: absolute;
+    right: 0;
+  }
+
+  .hotline {
+    width: 100%;
+    background-color: #001529;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    z-index: 1000;
+    display: none;
+  }
+
+  .wrapper {
+    display: block;
+  }
+
+  .left {
+    display: block;
+    width: 100%;
+    margin: 8px 8px;
+  }
+
+  .right {
+    width: 100%;
+  }
+
+  .hightLight {
+    width: 100%;
+  }
+  .rowCard {
+    display: block;
+  }
+  .colCard {
+    max-width: 95% !important;
+    padding: 4px 0;
+  }
+
+  .lineChart {
+    width: 95%;
+  }
+
+  .list-phone {
+    display: block;
+  }
+
+  .img {
+    width: 100vw !important;
+  }
+
+  .news {
+    display: block !important;
+  }
+
+  .listNews,
+  .video {
+    width: 100% !important;
+  }
+
+  .video {
+    margin: 16px 0 !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .rowCard,
+  .list-phone {
+    display: flex;
+  }
+}
