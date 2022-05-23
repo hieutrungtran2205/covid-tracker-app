@@ -64,6 +64,10 @@
     display: block;
   }
 
+  .countrySelector {
+    margin: 16px 0 0 16px !important;
+  }
+
   .left {
     display: block;
     width: 100%;
